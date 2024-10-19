@@ -86,20 +86,34 @@ public class JwtUtils {
         return REFRESH_TOKEN_TIME;
     }
 
+    public String getUserEmailFromToken(String token) {
+        Claims claims = extractClaims(token);
+        return claims.getSubject();
+    }
+
 
     public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            return tokenValue.substring(BEARER_PREFIX.length());
+            return tokenValue.substring(BEARER_PREFIX.length()).trim();
         }
-        throw new NotFoundException("Not Found Token");
+        throw new NotFoundException("토큰을 찾을 수 없습니다");
     }
 
     public Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            // Bearer 제거 및 공백 제거
+            if (token.startsWith(BEARER_PREFIX)) {
+                token = token.substring(BEARER_PREFIX.length()).trim();
+            }
+
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (io.jsonwebtoken.JwtException e) {
+            throw new IllegalArgumentException("Invalid JWT token", e);
+        }
     }
 
 

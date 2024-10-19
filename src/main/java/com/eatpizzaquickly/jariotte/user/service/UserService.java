@@ -46,7 +46,7 @@ public class UserService {
     @Transactional
     public String login(UserRequestDto userRequestDto) {
         User user = userRepository.findByEmail(userRequestDto.getEmail())
-                .orElseThrow();
+                .orElseThrow(()->new NotMatchException("이메일을 찾을수 없습니다"));
 
         if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())){
             throw new NotMatchException("잘못된 비밀번호 입니다.");
@@ -62,6 +62,13 @@ public class UserService {
                 TimeUnit.MILLISECONDS
         );
         return accessToken;
+    }
+
+    public String logout(String accessToken) {
+        String email = jwtUtils.getUserEmailFromToken(accessToken);
+        redisTemplate.delete("RT:" + email);
+        jwtUtils.invalidToken(accessToken);
+        return null;
     }
 
     public UserResponseDto MyPage(String email){

@@ -1,6 +1,7 @@
 package com.eatpizzaquickly.jariotte.user.controller;
 
 import com.eatpizzaquickly.jariotte.domain.common.advice.ApiResponse;
+import com.eatpizzaquickly.jariotte.domain.common.config.JwtUtils;
 import com.eatpizzaquickly.jariotte.domain.common.dto.CustomUserDetails;
 import com.eatpizzaquickly.jariotte.user.dto.UserRequestDto;
 import com.eatpizzaquickly.jariotte.user.dto.UserResponseDto;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final JwtUtils jwtUtils;
 
 
     @PostMapping
@@ -31,6 +33,12 @@ public class UserController {
     public ResponseEntity<ApiResponse<String>> login(@RequestBody UserRequestDto userRequestDto) {
         String token = userService.login(userRequestDto);
         return ResponseEntity.ok(ApiResponse.success("로그인 성공",token));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<String>> logout(@RequestHeader("Authorization") String token) {
+        userService.logout(token);
+        return ResponseEntity.ok(new ApiResponse<>("로그아웃 성공"));
     }
 
     @GetMapping("/my")
