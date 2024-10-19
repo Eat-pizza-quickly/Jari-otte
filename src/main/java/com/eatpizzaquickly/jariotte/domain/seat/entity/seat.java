@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class seat {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seat_id")
     private Long id;
     @Column(nullable = false)
     private String seatLocation;
