@@ -1,12 +1,18 @@
 package com.eatpizzaquickly.jariotte.user.entity;
 
+import com.eatpizzaquickly.jariotte.domain.coupon.entity.UserCoupon;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
 @Table(name = "user")
+@Entity
 public class User {
 
     @Id
@@ -30,12 +36,10 @@ public class User {
     @Column(nullable = false)
     private UserRole userRole;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<UserCoupon> userCoupons;
 
-    public User(String email,UserRole userRole) {
-        this.email = email;
-        this.userRole = userRole;
-    }
-
+    @Builder
     public User(String email, String password, String nickname, UserRole userRole) {
         this.email = email;
         this.password = password;
@@ -44,6 +48,11 @@ public class User {
     }
     public void deleteAccount(){
         this.isDelete = true;
+    }
+
+    public void updateUser(String password, String nickname){
+        this.password = password;
+        this.nickname = nickname;
     }
 
 }
