@@ -7,7 +7,8 @@ import com.eatpizzaquickly.jariotte.domain.user.dto.UserResponseDto;
 import com.eatpizzaquickly.jariotte.domain.user.entity.User;
 import com.eatpizzaquickly.jariotte.domain.user.entity.UserRole;
 import com.eatpizzaquickly.jariotte.domain.user.exception.DuplicateUserException;
-import com.eatpizzaquickly.jariotte.domain.user.exception.NotMatchException;
+import com.eatpizzaquickly.jariotte.domain.user.exception.PasswordNotMatchException;
+import com.eatpizzaquickly.jariotte.domain.user.exception.UserNotFoundException;
 import com.eatpizzaquickly.jariotte.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,10 +47,10 @@ public class UserService {
     @Transactional
     public String login(UserRequestDto userRequestDto) {
         User user = userRepository.findByEmail(userRequestDto.getEmail())
-                .orElseThrow(()->new NotMatchException("이메일을 찾을수 없습니다"));
+                .orElseThrow(()->new UserNotFoundException("유저를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())){
-            throw new NotMatchException("잘못된 비밀번호 입니다.");
+            throw new PasswordNotMatchException("잘못된 비밀번호 입니다.");
         }
 
         String accessToken = jwtUtils.createToken(user.getEmail(),user.getUserRole());
@@ -73,7 +74,7 @@ public class UserService {
 
     public UserResponseDto MyPage(String email){
         User user = userRepository.findByEmail(email)
-                .orElseThrow(()->new NotMatchException("유저를 찾을 수 없습니다."));
+                .orElseThrow(()->new UserNotFoundException("유저를 찾을 수 없습니다."));
         return UserResponseDto.from(user);
     }
 
@@ -81,7 +82,7 @@ public class UserService {
     public UserResponseDto updateUser(String email,UserRequestDto userRequestDto) {
         String newPassword = null;
         User user = userRepository.findByEmail(email)
-                .orElseThrow(()->new NotMatchException("유저를 찾을수 없습니다."));
+                .orElseThrow(()->new UserNotFoundException("유저를 찾을수 없습니다."));
         // 비밀번호가 동일하지 않으면 새 비밀번호로 인코딩, 동일하면 기존 비밀번호 유지
         if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
             newPassword = passwordEncoder.encode(userRequestDto.getPassword());
@@ -96,9 +97,9 @@ public class UserService {
     @Transactional
     public void deleteUser(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(()->new NotMatchException("유저를 찾을수 없습니다"));
+                .orElseThrow(()->new PasswordNotMatchException("유저를 찾을수 없습니다"));
         if(!passwordEncoder.matches(password,user.getPassword())){
-            throw new NotMatchException("비밀번호가 일치 하지않습니다.");
+            throw new PasswordNotMatchException("비밀번호가 일치 하지않습니다.");
         }
         user.deleteAccount();
     }
