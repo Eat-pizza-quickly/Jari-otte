@@ -1,27 +1,20 @@
 package com.eatpizzaquickly.jariotte.domain.common.config;
 
 import com.eatpizzaquickly.jariotte.domain.common.exception.NotFoundException;
-import com.eatpizzaquickly.jariotte.user.entity.UserRole;
+import com.eatpizzaquickly.jariotte.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Locale;
 
 @Component
 @Getter

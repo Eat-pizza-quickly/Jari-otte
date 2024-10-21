@@ -1,6 +1,6 @@
-package com.eatpizzaquickly.jariotte.user.repository;
+package com.eatpizzaquickly.jariotte.domain.user.repository;
 
-import com.eatpizzaquickly.jariotte.user.entity.User;
+import com.eatpizzaquickly.jariotte.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

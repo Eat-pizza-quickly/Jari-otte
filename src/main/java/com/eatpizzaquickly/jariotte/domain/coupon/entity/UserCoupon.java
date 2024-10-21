@@ -1,7 +1,7 @@
 package com.eatpizzaquickly.jariotte.domain.coupon.entity;
 
 
-import com.eatpizzaquickly.jariotte.user.entity.User;
+import com.eatpizzaquickly.jariotte.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

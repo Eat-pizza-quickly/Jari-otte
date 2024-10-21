@@ -1,4 +1,4 @@
-package com.eatpizzaquickly.jariotte.user.entity;
+package com.eatpizzaquickly.jariotte.domain.user.entity;
 
 import com.eatpizzaquickly.jariotte.domain.coupon.entity.UserCoupon;
 import jakarta.persistence.*;
@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter

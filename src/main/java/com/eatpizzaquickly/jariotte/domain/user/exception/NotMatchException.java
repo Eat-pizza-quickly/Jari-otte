@@ -1,4 +1,4 @@
-package com.eatpizzaquickly.jariotte.user.exception;
+package com.eatpizzaquickly.jariotte.domain.user.exception;
 
 import com.eatpizzaquickly.jariotte.domain.common.exception.NotFoundException;
 

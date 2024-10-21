@@ -1,7 +1,7 @@
 package com.eatpizzaquickly.jariotte.domain.common.dto;
 
-import com.eatpizzaquickly.jariotte.user.entity.User;
-import com.eatpizzaquickly.jariotte.user.entity.UserRole;
+import com.eatpizzaquickly.jariotte.domain.user.entity.User;
+import com.eatpizzaquickly.jariotte.domain.user.entity.UserRole;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

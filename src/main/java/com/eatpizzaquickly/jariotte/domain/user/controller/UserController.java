@@ -1,22 +1,20 @@
-package com.eatpizzaquickly.jariotte.user.controller;
+package com.eatpizzaquickly.jariotte.domain.user.controller;
 
 import com.eatpizzaquickly.jariotte.domain.common.advice.ApiResponse;
 import com.eatpizzaquickly.jariotte.domain.common.config.JwtUtils;
 import com.eatpizzaquickly.jariotte.domain.common.dto.CustomUserDetails;
-import com.eatpizzaquickly.jariotte.user.dto.UserRequestDto;
-import com.eatpizzaquickly.jariotte.user.dto.UserResponseDto;
-import com.eatpizzaquickly.jariotte.user.service.UserService;
+import com.eatpizzaquickly.jariotte.domain.user.dto.UserRequestDto;
+import com.eatpizzaquickly.jariotte.domain.user.dto.UserResponseDto;
+import com.eatpizzaquickly.jariotte.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/jari-otte/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;

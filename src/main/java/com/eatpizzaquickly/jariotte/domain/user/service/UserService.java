@@ -1,14 +1,14 @@
-package com.eatpizzaquickly.jariotte.user.service;
+package com.eatpizzaquickly.jariotte.domain.user.service;
 
 import com.eatpizzaquickly.jariotte.domain.common.config.JwtUtils;
 import com.eatpizzaquickly.jariotte.domain.common.config.PasswordEncoder;
-import com.eatpizzaquickly.jariotte.user.dto.UserRequestDto;
-import com.eatpizzaquickly.jariotte.user.dto.UserResponseDto;
-import com.eatpizzaquickly.jariotte.user.entity.User;
-import com.eatpizzaquickly.jariotte.user.entity.UserRole;
-import com.eatpizzaquickly.jariotte.user.exception.DuplicateUserException;
-import com.eatpizzaquickly.jariotte.user.exception.NotMatchException;
-import com.eatpizzaquickly.jariotte.user.repository.UserRepository;
+import com.eatpizzaquickly.jariotte.domain.user.dto.UserRequestDto;
+import com.eatpizzaquickly.jariotte.domain.user.dto.UserResponseDto;
+import com.eatpizzaquickly.jariotte.domain.user.entity.User;
+import com.eatpizzaquickly.jariotte.domain.user.entity.UserRole;
+import com.eatpizzaquickly.jariotte.domain.user.exception.DuplicateUserException;
+import com.eatpizzaquickly.jariotte.domain.user.exception.NotMatchException;
+import com.eatpizzaquickly.jariotte.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
-package com.eatpizzaquickly.jariotte.user.dto;
+package com.eatpizzaquickly.jariotte.domain.user.dto;
 
-import com.eatpizzaquickly.jariotte.user.entity.User;
-import com.eatpizzaquickly.jariotte.user.entity.UserRole;
+import com.eatpizzaquickly.jariotte.domain.user.entity.User;
+import com.eatpizzaquickly.jariotte.domain.user.entity.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

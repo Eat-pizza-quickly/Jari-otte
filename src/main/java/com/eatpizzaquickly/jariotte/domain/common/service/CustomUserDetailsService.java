@@ -2,8 +2,8 @@ package com.eatpizzaquickly.jariotte.domain.common.service;
 
 
 import com.eatpizzaquickly.jariotte.domain.common.dto.CustomUserDetails;
-import com.eatpizzaquickly.jariotte.user.entity.User;
-import com.eatpizzaquickly.jariotte.user.repository.UserRepository;
+import com.eatpizzaquickly.jariotte.domain.user.entity.User;
+import com.eatpizzaquickly.jariotte.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

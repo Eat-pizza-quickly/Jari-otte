@@ -2,7 +2,7 @@ package com.eatpizzaquickly.jariotte.domain.common.config;
 
 
 import com.eatpizzaquickly.jariotte.domain.common.service.CustomUserDetailsService;
-import com.eatpizzaquickly.jariotte.user.entity.UserRole;
+import com.eatpizzaquickly.jariotte.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
