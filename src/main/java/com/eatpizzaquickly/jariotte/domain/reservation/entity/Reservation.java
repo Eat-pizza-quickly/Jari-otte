@@ -1,10 +1,10 @@
 package com.eatpizzaquickly.jariotte.domain.reservation.entity;
 
 import com.eatpizzaquickly.jariotte.domain.concert.entity.Concert;
-import com.eatpizzaquickly.jariotte.domain.reservation.dto.request.PostReservationRequest;
 import com.eatpizzaquickly.jariotte.domain.seat.entity.Seat;
 import com.eatpizzaquickly.jariotte.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Reservation {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -35,7 +36,7 @@ public class Reservation {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id")
     private Seat seat;
 
@@ -43,11 +44,23 @@ public class Reservation {
     @JoinColumn(name = "concert_id")
     private Concert concert;
 
-    public Reservation(PostReservationRequest request, ReservationStatus reservationStatus, Concert concert, Seat seat) {
-        this.price = request.getPrice();
+    @Builder
+    public Reservation(int price, ReservationStatus reservationStatus, Concert concert) {
+        this.price = price;
         this.status = reservationStatus;
         this.concert = concert;
-        this.seat = seat;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void setSeatToReserved(Seat seat) {
+        seat.changeReserved(true);
+    }
+
+    public void setSeatToCancelled(Seat seat) {
+        seat.changeReserved(false);
+    }
+
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
     }
 }

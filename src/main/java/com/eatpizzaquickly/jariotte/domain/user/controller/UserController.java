@@ -3,6 +3,7 @@ package com.eatpizzaquickly.jariotte.domain.user.controller;
 import com.eatpizzaquickly.jariotte.domain.common.advice.ApiResponse;
 import com.eatpizzaquickly.jariotte.domain.common.config.JwtUtils;
 import com.eatpizzaquickly.jariotte.domain.common.dto.CustomUserDetails;
+import com.eatpizzaquickly.jariotte.domain.coupon.dto.CouponResponseDto;
 import com.eatpizzaquickly.jariotte.domain.user.dto.UserRequestDto;
 import com.eatpizzaquickly.jariotte.domain.user.dto.UserResponseDto;
 import com.eatpizzaquickly.jariotte.domain.user.service.UserService;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,8 +44,14 @@ public class UserController {
 
     @GetMapping("/my")
     public ResponseEntity<ApiResponse<UserResponseDto>> getUsers(@AuthenticationPrincipal CustomUserDetails authUser) {
-        UserResponseDto user = userService.MyPage(authUser.getEmail());
+        UserResponseDto user = userService.myPage(authUser.getEmail());
         return ResponseEntity.ok(ApiResponse.success("마이페이지 조회 성공",user));
+    }
+
+    @GetMapping("/my/my-coupon")
+    public ResponseEntity<ApiResponse<List<CouponResponseDto>>> getMyCoupons(@AuthenticationPrincipal CustomUserDetails authUser) {
+        List<CouponResponseDto> coupon = userService.getCoupon(authUser.getEmail());
+        return ResponseEntity.ok(ApiResponse.success("사용 가능한 쿠폰 조회 성공",coupon));
     }
 
     @PatchMapping("/my")
