@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -28,7 +27,7 @@ public class Seat {
 
     public void changeReserved(boolean status) {
         this.isReserved = status;
-      
+    }
     @Builder
     private Seat(Integer seatNumber, boolean isReserved, Concert concert) {
         this.seatNumber = seatNumber;
