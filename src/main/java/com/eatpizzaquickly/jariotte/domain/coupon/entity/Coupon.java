@@ -33,7 +33,7 @@ public class Coupon {
 
     private int quantity = 0;
 
-    private  Boolean isActive = false;
+    private  Boolean isActive = true;
 
     @OneToMany(mappedBy = "coupon", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UserCoupon> userCoupons;
@@ -41,7 +41,7 @@ public class Coupon {
 
     @Builder
     private Coupon(String couponCode, String couponName, CouponType couponType,DiscountType discountType ,int discount, int price, int quantity) {
-        this.couponCode = UUID.randomUUID().toString();
+        this.couponCode = couponCode;
         this.couponName = couponName;
         this.couponType = couponType;
         this.discountType = discountType;
@@ -59,7 +59,7 @@ public class Coupon {
     }
 
     public void checkIsActive(){
-        this.isActive = true;
+        this.isActive = false;
 
     }
 
