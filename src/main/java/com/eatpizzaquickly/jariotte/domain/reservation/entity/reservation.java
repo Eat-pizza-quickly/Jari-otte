@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 
-public class reservation {
+public class Reservation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
