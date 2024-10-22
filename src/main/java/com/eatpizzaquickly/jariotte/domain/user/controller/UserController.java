@@ -39,20 +39,20 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>("로그아웃 성공"));
     }
 
-    @GetMapping("/myPage")
+    @GetMapping("/my")
     public ResponseEntity<ApiResponse<UserResponseDto>> getUsers(@AuthenticationPrincipal CustomUserDetails authUser) {
         UserResponseDto user = userService.MyPage(authUser.getEmail());
         return ResponseEntity.ok(ApiResponse.success("마이페이지 조회 성공",user));
     }
 
-    @PatchMapping("/update")
+    @PatchMapping("/my")
     public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(@AuthenticationPrincipal CustomUserDetails authUser,
                                                                    @Valid @RequestBody UserRequestDto userRequestDto) {
         UserResponseDto user = userService.updateUser(authUser.getEmail(), userRequestDto);
         return ResponseEntity.ok(ApiResponse.success("수정 성공 ",user));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/my")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@AuthenticationPrincipal CustomUserDetails authUser,
                                                           @Valid @RequestBody UserRequestDto userRequestDto) {
          userService.deleteUser(authUser.getEmail(),userRequestDto.getPassword());
