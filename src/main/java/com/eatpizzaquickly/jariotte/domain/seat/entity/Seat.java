@@ -5,13 +5,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class seat {
+public class Seat {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seat_id")
