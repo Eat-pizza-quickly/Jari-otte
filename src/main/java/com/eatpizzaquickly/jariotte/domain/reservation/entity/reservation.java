@@ -11,10 +11,13 @@ public class reservation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private ReservationStatus status;
+
     @Column(nullable = false)
     private int price;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 }

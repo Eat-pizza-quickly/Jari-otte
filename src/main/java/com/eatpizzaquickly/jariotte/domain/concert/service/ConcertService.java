@@ -11,11 +11,17 @@ import com.eatpizzaquickly.jariotte.domain.concert.exception.ConcertNotFoundExce
 import com.eatpizzaquickly.jariotte.domain.concert.exception.VenueNotFountException;
 import com.eatpizzaquickly.jariotte.domain.concert.repository.ConcertRepository;
 import com.eatpizzaquickly.jariotte.domain.concert.repository.VenueRepository;
+import com.eatpizzaquickly.jariotte.domain.seat.entity.Seat;
+import com.eatpizzaquickly.jariotte.domain.seat.repository.SeatRepository;
+import com.eatpizzaquickly.jariotte.domain.seat.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,6 +30,7 @@ public class ConcertService {
 
     private final ConcertRepository concertRepository;
     private final VenueRepository venueRepository;
+    private final SeatRepository seatRepository;
 
     @Transactional
     public ConcertDetailResponse saveConcert(ConcertCreateRequest concertCreateRequest) {
@@ -42,16 +49,30 @@ public class ConcertService {
 
         concertRepository.save(concert);
 
+        List<Seat> seats = new ArrayList<>();
+        for (int i = 1; i <= venue.getSeatCount(); i++) {
+            Seat seat = Seat.builder()
+                    .seatNumber(i)
+                    .concert(concert)
+                    .isReserved(false)
+                    .build();
+
+            seats.add(seat);
+        }
+        seatRepository.saveAll(seats);
+
         return ConcertDetailResponse.from(concert, venue);
     }
 
     public ConcertDetailResponse findConcert(Long concertId) {
-        Concert concert = concertRepository.findById(concertId).orElseThrow(ConcertNotFoundException::new);
+        Concert concert = concertRepository.findByIdWithVenue(concertId).orElseThrow(ConcertNotFoundException::new);
         return ConcertDetailResponse.from(concert, concert.getVenue());
     }
 
     public ConcertListResponse searchConcert(String keyword, Pageable pageable) {
-        return null;
+        Page<Concert> concerts = concertRepository.searchByTitleOrArtists(keyword, pageable);
+        List<ConcertSimpleDto> concertSimpleDtoList = concerts.map(ConcertSimpleDto::from).toList();
+        return ConcertListResponse.of(concertSimpleDtoList);
     }
 
     @Transactional

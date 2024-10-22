@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,8 +27,9 @@ public class Seat {
     private Concert concert;
 
     @Builder
-    private Seat(Integer seatNumber, boolean isReserved) {
+    private Seat(Integer seatNumber, boolean isReserved, Concert concert) {
         this.seatNumber = seatNumber;
         this.isReserved = isReserved;
+        this.concert = concert;
     }
 }
