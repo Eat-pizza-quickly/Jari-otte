@@ -1,5 +1,6 @@
 package com.eatpizzaquickly.jariotte.domain.concert.entity;
 
+import com.eatpizzaquickly.jariotte.domain.common.util.StringListConvertor;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -42,12 +43,25 @@ public class Concert {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
+    @Convert(converter = StringListConvertor.class)
+    @Column(nullable = false)
+    private List<String> artists;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venue_id")
     private Venue venue;
 
     @Builder
-    private Concert(String title, String description, String thumbnailUrl, int avgRating, int seatCount, Category category, LocalDateTime startDate, LocalDateTime endDate, Venue venue) {
+    private Concert(String title,
+                    String description,
+                    String thumbnailUrl,
+                    int avgRating,
+                    int seatCount,
+                    Category category,
+                    LocalDateTime startDate,
+                    LocalDateTime endDate,
+                    List<String> artists,
+                    Venue venue) {
         this.title = title;
         this.description = description;
         this.thumbnailUrl = thumbnailUrl;
@@ -56,6 +70,7 @@ public class Concert {
         this.category = category;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.artists = artists;
         this.venue = venue;
     }
 }

@@ -28,8 +28,9 @@ public class Seat {
     private Concert concert;
 
     @Builder
-    private Seat(Integer seatNumber, boolean isReserved) {
+    private Seat(Integer seatNumber, boolean isReserved, Concert concert) {
         this.seatNumber = seatNumber;
         this.isReserved = isReserved;
+        this.concert = concert;
     }
 }
