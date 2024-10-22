@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -43,6 +42,7 @@ public class ConcertService {
                 .startDate(concertCreateRequest.getStartDate())
                 .endDate(concertCreateRequest.getEndDate())
                 .category(Category.of(concertCreateRequest.getCategory()))
+                .thumbnailUrl(concertCreateRequest.getThumbnailUrl())
                 .venue(venue)
                 .seatCount(venue.getSeatCount())
                 .build();
@@ -79,5 +79,11 @@ public class ConcertService {
     public void deleteConcert(Long concertId) {
         Concert concert = concertRepository.findById(concertId).orElseThrow(ConcertNotFoundException::new);
         concertRepository.delete(concert);
+    }
+
+    public Page<ConcertSimpleDto> searchByCategory(String category, Pageable pageable) {
+        Category vaildCategory = Category.of(category);
+        Page<Concert> concert = concertRepository.findAllByCategory(vaildCategory, pageable);
+        return concert.map(ConcertSimpleDto::from);
     }
 }

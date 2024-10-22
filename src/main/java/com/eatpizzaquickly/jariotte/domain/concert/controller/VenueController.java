@@ -16,6 +16,7 @@ public class VenueController {
     private final VenueService venueService;
 
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
     public ResponseEntity<VenueDetailResponse> createVenue(@RequestBody VenueCreateRequest venueCreateRequest) {
         VenueDetailResponse venueDetailResponse = venueService.saveVenue(venueCreateRequest);
         return ResponseEntity.ok(venueDetailResponse);

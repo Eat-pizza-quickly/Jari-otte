@@ -13,4 +13,5 @@ public class ConcertCreateRequest {
     private LocalDateTime endDate;
     private String category;
     private Long venueId;
+    private String thumbnailUrl;
 }

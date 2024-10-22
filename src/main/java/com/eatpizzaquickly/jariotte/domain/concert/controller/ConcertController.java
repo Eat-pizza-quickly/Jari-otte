@@ -1,10 +1,14 @@
 package com.eatpizzaquickly.jariotte.domain.concert.controller;
 
+import com.eatpizzaquickly.jariotte.domain.common.advice.ApiResponse;
+import com.eatpizzaquickly.jariotte.domain.concert.dto.ConcertSimpleDto;
 import com.eatpizzaquickly.jariotte.domain.concert.dto.reqeuest.ConcertCreateRequest;
 import com.eatpizzaquickly.jariotte.domain.concert.dto.response.ConcertDetailResponse;
 import com.eatpizzaquickly.jariotte.domain.concert.dto.response.ConcertListResponse;
 import com.eatpizzaquickly.jariotte.domain.concert.service.ConcertService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -46,4 +50,12 @@ public class ConcertController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<Page<ConcertSimpleDto>>> searchByCategory(
+            @RequestParam(name = "category") String category,
+            @PageableDefault Pageable pageable
+    ) {
+        Page<ConcertSimpleDto> concertSimpleDtos = concertService.searchByCategory(category, pageable);
+        return ResponseEntity.ok(ApiResponse.success("조회 성공", concertSimpleDtos));
+    }
 }
