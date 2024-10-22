@@ -4,7 +4,7 @@ import com.eatpizzaquickly.jariotte.domain.common.advice.ApiResponse;
 import com.eatpizzaquickly.jariotte.domain.common.dto.CustomUserDetails;
 import com.eatpizzaquickly.jariotte.domain.review.dto.ReviewRequestDto;
 import com.eatpizzaquickly.jariotte.domain.review.dto.ReviewResponseDto;
-import com.eatpizzaquickly.jariotte.domain.review.entity.Review;
+import com.eatpizzaquickly.jariotte.domain.review.dto.ReviewUpdateRequestDto;
 import com.eatpizzaquickly.jariotte.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,5 +35,16 @@ public class ReviewController {
     ) {
         Page<ReviewResponseDto> result = reviewService.findReviews(concertId, page, size);
         return ResponseEntity.ok(ApiResponse.success("댓글 조회 성공", result));
+    }
+
+    @PutMapping("/reviews/{reviewId}")
+    public ResponseEntity<ApiResponse<ReviewResponseDto>> updateReview(
+            @AuthenticationPrincipal CustomUserDetails authUser,
+            @PathVariable Long concertId,
+            @PathVariable Long reviewId,
+            @RequestBody ReviewUpdateRequestDto requestDto
+    ) {
+        ReviewResponseDto result = reviewService.updateReview(authUser.getEmail(), concertId, reviewId, requestDto);
+        return ResponseEntity.ok(ApiResponse.success("댓글 수정 성공", result));
     }
 }

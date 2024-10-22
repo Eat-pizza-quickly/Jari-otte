@@ -1,6 +1,7 @@
 package com.eatpizzaquickly.jariotte.domain.review.entity;
 
 import com.eatpizzaquickly.jariotte.domain.concert.entity.Concert;
+import com.eatpizzaquickly.jariotte.domain.review.dto.ReviewUpdateRequestDto;
 import com.eatpizzaquickly.jariotte.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,7 +17,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int rating;
+    private Integer rating;
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id", nullable = false)
@@ -26,7 +27,7 @@ public class Review {
     private User author;
 
     @Builder
-    public Review(int rating, String content,User author) {
+    public Review(Integer rating, String content, User author) {
         this.rating = rating;
         this.content = content;
         this.author = author;
@@ -34,5 +35,12 @@ public class Review {
 
     public void addConcert(Concert concert) {
         this.concert = concert;
+    }
+
+    public void update(ReviewUpdateRequestDto requestDto) {
+        if (requestDto.getRating() != null) {
+            this.rating = requestDto.getRating();
+        }
+        this.content = requestDto.getContent();
     }
 }

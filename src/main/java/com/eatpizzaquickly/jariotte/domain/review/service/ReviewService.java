@@ -1,9 +1,11 @@
 package com.eatpizzaquickly.jariotte.domain.review.service;
 
 import com.eatpizzaquickly.jariotte.domain.common.exception.NotFoundException;
+import com.eatpizzaquickly.jariotte.domain.common.exception.UnauthorizedException;
 import com.eatpizzaquickly.jariotte.domain.concert.entity.Concert;
 import com.eatpizzaquickly.jariotte.domain.review.dto.ReviewRequestDto;
 import com.eatpizzaquickly.jariotte.domain.review.dto.ReviewResponseDto;
+import com.eatpizzaquickly.jariotte.domain.review.dto.ReviewUpdateRequestDto;
 import com.eatpizzaquickly.jariotte.domain.review.entity.Review;
 import com.eatpizzaquickly.jariotte.domain.review.repository.ReviewRepository;
 import com.eatpizzaquickly.jariotte.domain.user.entity.User;
@@ -47,5 +49,24 @@ public class ReviewService {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Review> reviews = reviewRepository.findAllByConcertId(concertId, pageable);
         return reviews.map(ReviewResponseDto::from);
+    }
+
+    @Transactional
+    public ReviewResponseDto updateReview(String authUser, Long concertId, Long reviewId, ReviewUpdateRequestDto requestDto) {
+        User user = userRepository.findByEmail(authUser).orElseThrow(() ->
+                new NotFoundException("유저를 찾을 수 없습니다."));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
+                new NotFoundException("리뷰를 찾을 수 없습니다."));
+        String owner = review.getAuthor().getEmail();
+        if (!owner.equals(authUser)) {
+            throw new UnauthorizedException("리뷰 수정 권한이 없습니다.");
+        }
+        review.update(requestDto);
+        Review updatedReview = reviewRepository.save(review);
+        return ReviewResponseDto.from(updatedReview);
+    }
+
+    public void deleteReview(String authUser, Long reviewId){
+
     }
 }
