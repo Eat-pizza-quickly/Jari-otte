@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum PayMethod {
-    TOSS, KAKAO, NAVER;
+    TOSS;
 }
