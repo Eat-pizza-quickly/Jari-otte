@@ -16,11 +16,11 @@ public class PostPaymentResponse {
     private final String failureUrl;
 
     public PostPaymentResponse(Payment payment, String successUrl, String failureUrl) {
-        this.payUid = payment.getPay_uid();
+        this.payUid = payment.getPayUid();
         this.amount = payment.getAmount();
-        this.payInfo = payment.getPay_info();
-        this.payMethod = payment.getPay_method();
-        this.payStatus = payment.getPay_status();
+        this.payInfo = payment.getPayInfo();
+        this.payMethod = payment.getPayMethod();
+        this.payStatus = payment.getPayStatus();
         this.successUrl = successUrl;
         this.failureUrl = failureUrl;
     }

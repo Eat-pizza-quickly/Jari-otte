@@ -7,22 +7,32 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class GetPaymentResponse {
-    private final String payUid;
+    private String payUid;
     private String paymentKey;
-    private final int amount;
-    private final String payInfo;
-    private final PayMethod payMethod;
-    private final PayStatus payStatus;
+    private int amount;
+    private String payInfo;
+    private PayMethod payMethod;
+    private PayStatus payStatus;
     private String message;
     private String code;
 
     public GetPaymentResponse(Payment payment) {
-        this.payUid = payment.getPay_uid();
+        this.payUid = payment.getPayUid();
         this.amount = payment.getAmount();
-        this.payInfo = payment.getPay_info();
-        this.payMethod = payment.getPay_method();
-        this.payStatus = payment.getPay_status();
+        this.payInfo = payment.getPayInfo();
+        this.payMethod = payment.getPayMethod();
+        this.payStatus = payment.getPayStatus();
+    }
+
+    @Builder
+    public GetPaymentResponse(String paymentKey, int amount, String payInfo, PayMethod payMethod, PayStatus payStatus, String message, String code) {
+        this.paymentKey = paymentKey;
+        this.amount = amount;
+        this.payInfo = payInfo;
+        this.payMethod = payMethod;
+        this.payStatus = payStatus;
+        this.message = message;
+        this.code = code;
     }
 }

@@ -42,7 +42,7 @@ public class PaymentService {
     /* 결제 성공 */
     @Transactional
     public GetPaymentResponse TossPaymentSuccess(String paymentKey, String orderId, Long amount) {
-        Payment payment = paymentRepository.findByPay_uid(orderId).orElseThrow(
+        Payment payment = paymentRepository.findByPayUid(orderId).orElseThrow(
                 () -> new IllegalArgumentException("결제를 찾을 수 없습니다."));
 
         if (payment.getAmount() != amount) {
@@ -83,7 +83,7 @@ public class PaymentService {
     }
 
     public GetPaymentResponse tossPaymentFail(String code, String message, String orderId) {
-        Payment payment = paymentRepository.findByPay_uid(orderId)
+        Payment payment = paymentRepository.findByPayUid(orderId)
                 .orElseThrow(() -> new RuntimeException("결제를 찾을 수 없습니다."));
 
         payment.setPayStatus(PayStatus.FAILED);

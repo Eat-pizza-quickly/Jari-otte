@@ -15,27 +15,27 @@ public class Payment {
     private Long id;
 
     @Column(name = "pay_uid")
-    private String pay_uid;
+    private String payUid;
     private int amount;
-    private String pay_info;
+    private String payInfo;
 
     @Column(name = "pay_method")
     @Enumerated(EnumType.STRING)
-    private PayMethod pay_method;
+    private PayMethod payMethod;
 
     @Column(name = "pay_status")
     @Enumerated(EnumType.STRING)
-    private PayStatus pay_status;
+    private PayStatus payStatus;
 
     public Payment(String pay_uid, int amount, String payInfo, PayMethod payMethod, PayStatus payStatus) {
-        this.pay_uid = pay_uid;
+        this.payUid = pay_uid;
         this.amount = amount;
-        this.pay_info = payInfo;
-        this.pay_method = payMethod;
-        this.pay_status = payStatus;
+        this.payInfo = payInfo;
+        this.payMethod = payMethod;
+        this.payStatus = payStatus;
     }
 
     public void setPayStatus(PayStatus payStatus) {
-        this.pay_status = payStatus;
+        this.payStatus = payStatus;
     }
 }
