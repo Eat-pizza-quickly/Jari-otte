@@ -34,3 +34,10 @@ jwt:
 logging:
   level:
     root: info
+
+payment:
+  toss:
+    test_client_api_key : ${CLIENT_API_KEY}
+    test_secrete_api_key : ${SECRETE_API_KEY}
+    success_url : "http://localhost:8080/api/v1/payments/toss/success"
+    fail_url : "http://localhost:8080/api/v1/payments/toss/fail"
