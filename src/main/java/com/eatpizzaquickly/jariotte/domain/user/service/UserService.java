@@ -2,6 +2,9 @@ package com.eatpizzaquickly.jariotte.domain.user.service;
 
 import com.eatpizzaquickly.jariotte.domain.common.config.JwtUtils;
 import com.eatpizzaquickly.jariotte.domain.common.config.PasswordEncoder;
+import com.eatpizzaquickly.jariotte.domain.coupon.dto.CouponResponseDto;
+import com.eatpizzaquickly.jariotte.domain.coupon.entity.Coupon;
+import com.eatpizzaquickly.jariotte.domain.coupon.service.CouponService;
 import com.eatpizzaquickly.jariotte.domain.user.dto.UserRequestDto;
 import com.eatpizzaquickly.jariotte.domain.user.dto.UserResponseDto;
 import com.eatpizzaquickly.jariotte.domain.user.entity.User;
@@ -15,12 +18,15 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.PublicKey;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final CouponService couponService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
@@ -72,10 +78,19 @@ public class UserService {
         return null;
     }
 
-    public UserResponseDto MyPage(String email){
+    public UserResponseDto myPage(String email){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new UserNotFoundException("유저를 찾을 수 없습니다."));
         return UserResponseDto.from(user);
+    }
+
+    public List<CouponResponseDto> getCoupon(String email) {
+        // 사용자가 존재하는지 확인 (UserNotFoundException 처리)
+        userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
+
+        // 사용자의 사용 가능한 쿠폰 목록 반환
+        return couponService.findAvailableCoupons(email);
     }
 
     @Transactional
