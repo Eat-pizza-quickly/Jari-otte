@@ -1,6 +1,5 @@
 package com.eatpizzaquickly.jariotte.domain.payment.entity;
 
-import com.eatpizzaquickly.jariotte.domain.reservation.entity.reservation;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
