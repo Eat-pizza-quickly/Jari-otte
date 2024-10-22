@@ -1,5 +1,6 @@
 package com.eatpizzaquickly.jariotte.domain.concert.service;
 
+import com.eatpizzaquickly.jariotte.domain.concert.dto.ConcertSimpleDto;
 import com.eatpizzaquickly.jariotte.domain.concert.dto.reqeuest.ConcertCreateRequest;
 import com.eatpizzaquickly.jariotte.domain.concert.dto.response.ConcertDetailResponse;
 import com.eatpizzaquickly.jariotte.domain.concert.dto.response.ConcertListResponse;
@@ -11,6 +12,7 @@ import com.eatpizzaquickly.jariotte.domain.concert.exception.VenueNotFountExcept
 import com.eatpizzaquickly.jariotte.domain.concert.repository.ConcertRepository;
 import com.eatpizzaquickly.jariotte.domain.concert.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,5 +58,11 @@ public class ConcertService {
     public void deleteConcert(Long concertId) {
         Concert concert = concertRepository.findById(concertId).orElseThrow(ConcertNotFoundException::new);
         concertRepository.delete(concert);
+    }
+
+    public Page<ConcertSimpleDto> searchByCategory(String category, Pageable pageable) {
+        Category vaildCategory = Category.of(category);
+        Page<Concert> concert = concertRepository.findAllByCategory(vaildCategory, pageable);
+        return concert.map(ConcertSimpleDto::from);
     }
 }
