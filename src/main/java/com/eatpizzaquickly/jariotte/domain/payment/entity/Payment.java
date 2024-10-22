@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "payments")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class payment {
+public class Payment {
     @Column(name = "pay_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
