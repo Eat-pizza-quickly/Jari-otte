@@ -47,4 +47,13 @@ public class ReviewController {
         ReviewResponseDto result = reviewService.updateReview(authUser.getEmail(), concertId, reviewId, requestDto);
         return ResponseEntity.ok(ApiResponse.success("댓글 수정 성공", result));
     }
+
+    @DeleteMapping("/reviews/{reviewId}")
+    public ResponseEntity<ApiResponse> deleteReveiw(
+            @AuthenticationPrincipal CustomUserDetails authUser,
+            @PathVariable Long reviewId
+    ) {
+        reviewService.deleteReview(authUser.getEmail(), reviewId);
+        return ResponseEntity.ok(ApiResponse.success("댓글 삭제 성공", reviewId));
+    }
 }

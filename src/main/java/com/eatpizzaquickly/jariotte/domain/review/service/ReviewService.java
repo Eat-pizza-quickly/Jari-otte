@@ -53,8 +53,6 @@ public class ReviewService {
 
     @Transactional
     public ReviewResponseDto updateReview(String authUser, Long concertId, Long reviewId, ReviewUpdateRequestDto requestDto) {
-        User user = userRepository.findByEmail(authUser).orElseThrow(() ->
-                new NotFoundException("유저를 찾을 수 없습니다."));
         Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
                 new NotFoundException("리뷰를 찾을 수 없습니다."));
         String owner = review.getAuthor().getEmail();
@@ -66,7 +64,14 @@ public class ReviewService {
         return ReviewResponseDto.from(updatedReview);
     }
 
-    public void deleteReview(String authUser, Long reviewId){
-
+    @Transactional
+    public void deleteReview(String authUser, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
+                new NotFoundException("리뷰를 찾을 수 없습니다."));
+        String owner = review.getAuthor().getEmail();
+        if (!owner.equals(authUser)) {
+            throw new UnauthorizedException("리뷰 수정 권한이 없습니다.");
+        }
+        reviewRepository.delete(review);
     }
 }
