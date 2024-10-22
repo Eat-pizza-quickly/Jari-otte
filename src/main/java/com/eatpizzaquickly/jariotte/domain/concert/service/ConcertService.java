@@ -35,6 +35,7 @@ public class ConcertService {
                 .startDate(concertCreateRequest.getStartDate())
                 .endDate(concertCreateRequest.getEndDate())
                 .category(Category.of(concertCreateRequest.getCategory()))
+                .thumbnailUrl(concertCreateRequest.getThumbnailUrl())
                 .venue(venue)
                 .seatCount(venue.getSeatCount())
                 .build();
