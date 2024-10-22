@@ -26,7 +26,6 @@ public class Concert {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private String thumbnailUrl;
 
     private int avgRating;
