@@ -23,4 +23,10 @@ public class PostReservationResponse {
         this.created_at = reservation.getCreatedAt();
         this.userId = reservation.getUser().getId();
     }
+
+    public static PostReservationResponse from(Reservation reservation) {
+        return new PostReservationResponse(
+                reservation
+        );
+    }
 }

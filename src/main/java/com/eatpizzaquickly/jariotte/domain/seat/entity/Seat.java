@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seat {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seat_id")
     private Long id;
     @Column(nullable = false)
@@ -21,4 +22,7 @@ public class Seat {
     private LocalDateTime reservedAt;
     private boolean isReserved = false;
 
+    public void changeReserved(boolean status) {
+        this.isReserved = status;
+    }
 }
