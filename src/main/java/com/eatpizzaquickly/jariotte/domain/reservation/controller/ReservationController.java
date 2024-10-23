@@ -11,12 +11,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/concerts/{concertId}/seats/{seatId}")
+@RequestMapping("/api/v1/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
     private final ReservationService reservationService;
 
-    @PostMapping("/reservations")
+    @PostMapping
     public ResponseEntity<ApiResponse<PostReservationResponse>> createReservation(
             @PathVariable Long concertId,
             @PathVariable Long seatId,
@@ -26,7 +26,7 @@ public class ReservationController {
         return ResponseEntity.ok(ApiResponse.success("예약 성공", response));
     }
 
-    @PostMapping("/reservations/{reservationId}")
+    @PostMapping("/reservations/{reservationId}/cancel")
     public ResponseEntity<ApiResponse> cancelReservation(
             @AuthenticationPrincipal CustomUserDetails authUser,
             @PathVariable Long reservationId
