@@ -29,9 +29,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        String requestURI = request.getRequestURI();
+
+        // /api/v1/payments/toss 경로에 대해서는 필터를 통과시키기
+        if (requestURI.startsWith("/api/v1/payments/toss")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authorizationHeader = request.getHeader("Authorization");
 
-        // Authorization 헤더가 없거나 Bearer 토큰이 아닌 경우 필터 통과
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -47,13 +54,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String email = claims.get("email", String.class);
         UserRole userRole = UserRole.of(claims.get("userRole", String.class));
-        // HttpServletRequest에 사용자 정보 저장 (기존 방식 유지)
-        request.setAttribute("email", email);
-        log.info("email:{} ", email);
-        request.setAttribute("userRole", userRole);
-        log.info("userRole:{} ", userRole);
 
-        // SecurityContextHolder에 인증 정보 저장
+        request.setAttribute("email", email);
+        request.setAttribute("userRole", userRole);
+
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
             if (userDetails != null) {
@@ -66,5 +70,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
 }

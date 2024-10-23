@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 public class TossPaymentResponse {
     private String paymentKey;
     private String orderId;
-    private int totalAmount;
+    private Long totalAmount;
     private String status;
     private String createdAt;
     private String lastTransactionKey;
     private String failReason;
+    private  Long cancleAmount;
 }

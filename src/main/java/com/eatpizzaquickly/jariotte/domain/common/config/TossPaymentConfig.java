@@ -9,17 +9,18 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @Getter
 public class TossPaymentConfig {
-    @Value("$payment.toss.test_client_api_key}")
+    @Value("${payment.toss.test_client_api_key}")
     private String testClientApiKey;
 
-    @Value("payment.toss.test_secrete_api_key")
+    @Value("${payment.toss.test_secret_api_key}")
     private String testClientSecretKey;
 
-    @Value("payment.toss.success_url")
+    @Value("${payment.toss.success_url}")
     private String successUrl;
 
-    @Value("payment.toss.fail_url")
+    @Value("${payment.toss.fail_url}")
     private String failureUrl;
+
 
     public static final String URL = "https://api.tosspayments.com/v1/payments/";
 
@@ -27,4 +28,6 @@ public class TossPaymentConfig {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
+
 }

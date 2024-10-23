@@ -42,26 +42,26 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>("로그아웃 성공"));
     }
 
-    @GetMapping("/my")
+    @GetMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> getUsers(@AuthenticationPrincipal CustomUserDetails authUser) {
         UserResponseDto user = userService.myPage(authUser.getEmail());
         return ResponseEntity.ok(ApiResponse.success("마이페이지 조회 성공",user));
     }
 
-    @GetMapping("/my/my-coupon")
+    @GetMapping("/my-coupon")
     public ResponseEntity<ApiResponse<List<CouponResponseDto>>> getMyCoupons(@AuthenticationPrincipal CustomUserDetails authUser) {
         List<CouponResponseDto> coupon = userService.getCoupon(authUser.getEmail());
         return ResponseEntity.ok(ApiResponse.success("사용 가능한 쿠폰 조회 성공",coupon));
     }
 
-    @PatchMapping("/my")
+    @PatchMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(@AuthenticationPrincipal CustomUserDetails authUser,
                                                                    @Valid @RequestBody UserRequestDto userRequestDto) {
         UserResponseDto user = userService.updateUser(authUser.getEmail(), userRequestDto);
         return ResponseEntity.ok(ApiResponse.success("수정 성공 ",user));
     }
 
-    @DeleteMapping("/my")
+    @PatchMapping("/delete")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@AuthenticationPrincipal CustomUserDetails authUser,
                                                           @Valid @RequestBody UserRequestDto userRequestDto) {
          userService.deleteUser(authUser.getEmail(),userRequestDto.getPassword());

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class PostPaymentResponse {
     private final String payUid;
-    private final int amount;
+    private final Long amount;
     private final String payInfo;
     private final PayMethod payMethod;
     private final PayStatus payStatus;
