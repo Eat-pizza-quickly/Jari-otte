@@ -11,6 +11,9 @@ import com.eatpizzaquickly.jariotte.domain.reservation.entity.ReservationStatus;
 import com.eatpizzaquickly.jariotte.domain.reservation.repository.ReservationRepository;
 import com.eatpizzaquickly.jariotte.domain.seat.entity.Seat;
 import com.eatpizzaquickly.jariotte.domain.seat.repository.SeatRepository;
+import com.eatpizzaquickly.jariotte.domain.user.entity.User;
+import com.eatpizzaquickly.jariotte.domain.user.exception.UserNotFoundException;
+import com.eatpizzaquickly.jariotte.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +24,13 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ConcertRepository concertRepository;
     private final SeatRepository seatRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public PostReservationResponse createReservation(PostReservationRequest request) {
         // 유저 검토
-
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
+                () -> new UserNotFoundException("유저를 찾지 못했습니다."));
         // 콘서트, 좌석 검토
         Concert concert = concertRepository.findById(request.getConcertId()).orElseThrow(
                 () -> new NotFoundException("콘서트가 존재하지 않습니다."));
@@ -36,6 +41,8 @@ public class ReservationService {
         // 엔티티 변환
         Reservation reservation = Reservation.builder()
                 .price(request.getPrice())
+                .user(user)
+                .seat(seat)
                 .reservationStatus(ReservationStatus.PENDING)
                 .concert(concert)
                 .build();

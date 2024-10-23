@@ -45,11 +45,17 @@ public class Reservation {
     private Concert concert;
 
     @Builder
-    public Reservation(int price, ReservationStatus reservationStatus, Concert concert) {
+    public Reservation(int price, User user, Seat seat, ReservationStatus reservationStatus, Concert concert) {
         this.price = price;
+        this.user = user;
+        this.seat = seat;
         this.status = reservationStatus;
         this.concert = concert;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void statusUpdate(ReservationStatus reservationStatus) {
+        this.status = reservationStatus;
     }
 
     public void setSeatToReserved(Seat seat) {

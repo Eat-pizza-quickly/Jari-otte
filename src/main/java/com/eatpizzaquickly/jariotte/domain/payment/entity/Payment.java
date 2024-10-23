@@ -1,5 +1,6 @@
 package com.eatpizzaquickly.jariotte.domain.payment.entity;
 
+import com.eatpizzaquickly.jariotte.domain.reservation.entity.Reservation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,14 +32,17 @@ public class Payment {
 
     private String paymentKey;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
 
-
-    public Payment(String pay_uid, Long amount, String payInfo, PayMethod payMethod, PayStatus payStatus) {
+    public Payment(String pay_uid, Long price, String payInfo, PayMethod payMethod, PayStatus payStatus, Reservation reservation) {
         this.payUid = pay_uid;
-        this.amount = amount;
+        this.amount = price;
         this.payInfo = payInfo;
         this.payMethod = payMethod;
         this.payStatus = payStatus;
+        this.reservation = reservation;
     }
 
     public void setPayStatus(PayStatus payStatus) {

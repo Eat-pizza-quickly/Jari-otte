@@ -98,13 +98,13 @@ public class CouponService {
     }
 
     @Transactional
-    public int applyCoupon(Long couponId, int originalPrice){
+    public Long applyCoupon(Long couponId, Long originalPrice){
         Coupon coupon = couponsRepository.findById(couponId)
                 .orElseThrow(()->new CouponNotFoundException("쿠폰이 존재 하지 않습니다."));
         if(!coupon.getIsActive()){
             throw new CouponActiveException("사용가능한 쿠폰이 아닙니다.");
         }
-        int discountedPrice = originalPrice;
+        Long discountedPrice = originalPrice;
         if(coupon.getDiscountType() == DiscountType.PERCENTAGE){
             discountedPrice -=(originalPrice * coupon.getDiscount() / 100);
         }
