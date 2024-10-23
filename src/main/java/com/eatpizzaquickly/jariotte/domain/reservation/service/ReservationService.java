@@ -57,7 +57,7 @@ public class ReservationService {
         }
 
         reservation.setSeatToCancelled(reservation.getSeat());
-        reservation.setStatus(ReservationStatus.CANCELLED);
+        reservation.setStatus(ReservationStatus.CANCELED);
 
         reservationRepository.save(reservation);
     }

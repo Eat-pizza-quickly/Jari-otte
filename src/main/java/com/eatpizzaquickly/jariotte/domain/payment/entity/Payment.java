@@ -16,7 +16,9 @@ public class Payment {
 
     @Column(name = "pay_uid")
     private String payUid;
-    private int amount;
+
+    private Long amount;
+
     private String payInfo;
 
     @Column(name = "pay_method")
@@ -27,7 +29,11 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PayStatus payStatus;
 
-    public Payment(String pay_uid, int amount, String payInfo, PayMethod payMethod, PayStatus payStatus) {
+    private String paymentKey;
+
+
+
+    public Payment(String pay_uid, Long amount, String payInfo, PayMethod payMethod, PayStatus payStatus) {
         this.payUid = pay_uid;
         this.amount = amount;
         this.payInfo = payInfo;
@@ -37,5 +43,9 @@ public class Payment {
 
     public void setPayStatus(PayStatus payStatus) {
         this.payStatus = payStatus;
+    }
+
+    public void setPaymentKey(String paymentKey) {
+        this.paymentKey = paymentKey;
     }
 }

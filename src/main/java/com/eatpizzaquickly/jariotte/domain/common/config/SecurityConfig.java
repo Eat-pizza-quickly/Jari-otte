@@ -20,15 +20,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (JWT 사용 시 필요하지 않음)
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않음 (JWT 기반 인증)
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/users","/api/v1/users/login").permitAll() // 인증 관련 엔드포인트는 모두 접근 가능
-                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
+                        .requestMatchers("/api/v1/users","/api/v1/users/login").permitAll()
+                        .requestMatchers("/payment", "/payment.html").permitAll()
+                        .requestMatchers("/api/v1/payments/**").permitAll()  // 슬래시(/) 추가
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT 필터 추가
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

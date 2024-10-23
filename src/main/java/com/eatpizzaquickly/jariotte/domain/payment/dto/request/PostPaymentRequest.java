@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class PostPaymentRequest {
-    private int amount;
+    private Long amount;
     private String payInfo;
 }

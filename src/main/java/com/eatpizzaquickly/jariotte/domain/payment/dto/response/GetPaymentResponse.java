@@ -10,7 +10,7 @@ import lombok.Getter;
 public class GetPaymentResponse {
     private String payUid;
     private String paymentKey;
-    private int amount;
+    private Long amount;
     private String payInfo;
     private PayMethod payMethod;
     private PayStatus payStatus;
@@ -26,7 +26,7 @@ public class GetPaymentResponse {
     }
 
     @Builder
-    public GetPaymentResponse(String paymentKey, int amount, String payInfo, PayMethod payMethod, PayStatus payStatus, String message, String code) {
+    public GetPaymentResponse(String paymentKey, Long amount, String payInfo, PayMethod payMethod, PayStatus payStatus, String message, String code) {
         this.paymentKey = paymentKey;
         this.amount = amount;
         this.payInfo = payInfo;
