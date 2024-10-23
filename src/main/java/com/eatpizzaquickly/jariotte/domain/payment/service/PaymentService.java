@@ -174,6 +174,7 @@ public class PaymentService {
                 .code(code)
                 .build();
     }
+
     @Transactional
     public GetPaymentResponse cancelPayment(String paymentKey, String cancelReason) {
         // 1. 결제 정보 조회
@@ -232,6 +233,7 @@ public class PaymentService {
 
         return response.getBody();
     }
+
     private TossPaymentResponse requestTossPaymentCancel(String paymentKey, String cancelReason) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((TOSS_SECRET_KEY + ":").getBytes()));
