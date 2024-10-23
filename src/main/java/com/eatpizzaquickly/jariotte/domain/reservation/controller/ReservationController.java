@@ -18,11 +18,9 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<PostReservationResponse>> createReservation(
-            @PathVariable Long concertId,
-            @PathVariable Long seatId,
             @RequestBody PostReservationRequest request
     ) {
-        PostReservationResponse response = reservationService.createReservation(concertId, seatId, request);
+        PostReservationResponse response = reservationService.createReservation(request);
         return ResponseEntity.ok(ApiResponse.success("예약 성공", response));
     }
 

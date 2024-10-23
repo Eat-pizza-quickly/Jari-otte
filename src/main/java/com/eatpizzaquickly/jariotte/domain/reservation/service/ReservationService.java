@@ -23,14 +23,14 @@ public class ReservationService {
     private final SeatRepository seatRepository;
 
     @Transactional
-    public PostReservationResponse createReservation(Long concertId, Long seatId, PostReservationRequest request) {
+    public PostReservationResponse createReservation(PostReservationRequest request) {
         // 유저 검토
 
         // 콘서트, 좌석 검토
-        Concert concert = concertRepository.findById(concertId).orElseThrow(
+        Concert concert = concertRepository.findById(request.getConcertId()).orElseThrow(
                 () -> new NotFoundException("콘서트가 존재하지 않습니다."));
 
-        Seat seat = seatRepository.findById(seatId).orElseThrow(
+        Seat seat = seatRepository.findById(request.getSeatId()).orElseThrow(
                 () -> new NotFoundException("좌석이 존재하지 않습니다."));
 
         // 엔티티 변환
