@@ -52,6 +52,10 @@ public class Reservation {
         this.createdAt = LocalDateTime.now();
     }
 
+    public void statusUpdate(ReservationStatus reservationStatus) {
+        this.status = reservationStatus;
+    }
+
     public void setSeatToReserved(Seat seat) {
         seat.changeReserved(true);
     }

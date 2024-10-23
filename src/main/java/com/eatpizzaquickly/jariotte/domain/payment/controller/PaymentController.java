@@ -19,8 +19,11 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/toss")
-    public ResponseEntity<String> requestPayment(@RequestBody PostPaymentRequest request) {
-        String redirectUrl = paymentService.requestTossPayment(request);
+    public ResponseEntity<String> requestPayment(
+            @RequestBody PostPaymentRequest request,
+            @RequestParam(name = "couponId", required = false) Long couponId
+    ) {
+        String redirectUrl = paymentService.requestTossPayment(request, couponId);
         // 리다이렉트 URL을 반환하도록 수정
         return ResponseEntity.ok(redirectUrl);
     }

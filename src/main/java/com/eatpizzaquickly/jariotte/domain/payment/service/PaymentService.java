@@ -1,6 +1,8 @@
 package com.eatpizzaquickly.jariotte.domain.payment.service;
 
 import com.eatpizzaquickly.jariotte.domain.common.config.TossPaymentConfig;
+import com.eatpizzaquickly.jariotte.domain.common.exception.NotFoundException;
+import com.eatpizzaquickly.jariotte.domain.coupon.service.CouponService;
 import com.eatpizzaquickly.jariotte.domain.payment.dto.response.TossPaymentResponse;
 import com.eatpizzaquickly.jariotte.domain.payment.dto.request.PaymentConfirmRequest;
 import com.eatpizzaquickly.jariotte.domain.payment.dto.request.PostPaymentRequest;
@@ -11,6 +13,8 @@ import com.eatpizzaquickly.jariotte.domain.payment.entity.Payment;
 import com.eatpizzaquickly.jariotte.domain.payment.exception.*;
 import com.eatpizzaquickly.jariotte.domain.payment.repository.PaymentRepository;
 import com.eatpizzaquickly.jariotte.domain.reservation.entity.Reservation;
+import com.eatpizzaquickly.jariotte.domain.reservation.entity.ReservationStatus;
+import com.eatpizzaquickly.jariotte.domain.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +30,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class PaymentService {
     private final PaymentRepository paymentRepository;
+    private final ReservationRepository reservationRepository;
     private final TossPaymentConfig tossPaymentConfig;
     private final RestTemplate restTemplate;
+    private final CouponService couponService;
 
     @Value("${payment.toss.url}")
     private String TOSS_URL;
@@ -47,17 +53,25 @@ public class PaymentService {
     private String FAIL_URL;
 
     /* 결제 요청 */
-    public String requestTossPayment(PostPaymentRequest request) {
+    public String requestTossPayment(PostPaymentRequest request, Long couponId) {
+        // 예약 확인
+        Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(
+                () -> new NotFoundException("예약을 찾을수 없습니다."));
+
         // 주문 ID 생성
         String orderId = UUID.randomUUID().toString();
-
+        Long price = request.getAmount();
+        if (couponId != null) {
+            price = couponService.applyCoupon(couponId, request.getAmount()); // 쿠폰 적용 값
+        }
         // DB 저장
         Payment payment = new Payment(
                 orderId,
-                request.getAmount(),
+                price,
                 request.getPayInfo(),
                 PayMethod.TOSS,
-                PayStatus.READY
+                PayStatus.READY,
+                reservation
         );
         paymentRepository.save(payment);
 
@@ -67,7 +81,7 @@ public class PaymentService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> payloadMap = new HashMap<>();
-        payloadMap.put("amount", request.getAmount());
+        payloadMap.put("amount", price);
         payloadMap.put("orderId", orderId);
         payloadMap.put("orderName", request.getPayInfo());
         payloadMap.put("method", "카드");
@@ -89,7 +103,7 @@ public class PaymentService {
                 // 리다이렉트 URL 생성
                 return SUCCESS_URL + "?orderId=" + orderId
                         + "&paymentKey=" + paymentKey
-                        + "&amount=" + request.getAmount();
+                        + "&amount=" + price;
             }
         } catch (Exception e) {
             log.error("토스 결제 요청 실패: ", e);
@@ -105,6 +119,9 @@ public class PaymentService {
         Payment payment = paymentRepository.findByPayUid(orderId)
                 .orElseThrow(() -> new PaymentNotFoundException("결제 정보를 찾을 수 없습니다."));
 
+        Reservation reservation = reservationRepository.findById(payment.getReservation().getId()).orElseThrow(
+                () -> new NotFoundException("예약을 찾을수 없습니다."));
+
         try {
             // 2. 토스페이먼츠 결제 승인 API 호출
             TossPaymentResponse tossResponse = requestTossPayment(paymentKey, orderId, amount);
@@ -113,6 +130,9 @@ public class PaymentService {
             payment.setPayStatus(PayStatus.PAID);
             payment.setPaymentKey(tossResponse.getPaymentKey());
             paymentRepository.save(payment);
+
+            // 예약 상태 업데이트
+            reservation.statusUpdate(ReservationStatus.CONFIRMED);
 
             // 4. 주문 처리 로직 (필요한 경우)
             // orderService.completeOrder(orderId);
