@@ -44,7 +44,7 @@ public class ConcertController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{concertId}")
+    @PatchMapping("/{concertId}")
     public ResponseEntity<Void> deleteConcert(@PathVariable Long concertId) {
         concertService.deleteConcert(concertId);
         return ResponseEntity.noContent().build();

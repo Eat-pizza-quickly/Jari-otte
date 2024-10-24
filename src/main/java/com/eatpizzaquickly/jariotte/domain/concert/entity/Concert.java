@@ -6,13 +6,17 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@SQLDelete(sql = "UPDATE concert SET deleted = true WHERE concert_id = ?")
+@SQLRestriction("deleted = false")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Concert {
 
     @Column(name = "concert_id")
@@ -49,6 +53,8 @@ public class Concert {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venue_id")
     private Venue venue;
+
+    private Boolean deleted = false;
 
     @Builder
     private Concert(String title,
