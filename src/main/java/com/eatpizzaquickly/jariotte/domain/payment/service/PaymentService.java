@@ -181,6 +181,9 @@ public class PaymentService {
         Payment payment = paymentRepository.findByPaymentKey(paymentKey)
                 .orElseThrow(() -> new PaymentNotFoundException("결제 정보를 찾을 수 없습니다."));
 
+        Reservation reservation = reservationRepository.findById(payment.getReservation().getId()).orElseThrow(
+                () -> new NotFoundException("예약을 찾을수 없습니다."));
+
         // 2. 결제 상태 확인
         if (payment.getPayStatus() == PayStatus.CANCELLED) {
             throw new PaymentAlreadyCanceledException("이미 취소된 결제입니다.");
@@ -197,6 +200,9 @@ public class PaymentService {
             // 4. 결제 취소 상태 업데이트
             payment.setPayStatus(PayStatus.CANCELLED);
             paymentRepository.save(payment);
+
+            // 예약 상태 업데이트
+            reservation.statusUpdate(ReservationStatus.CANCELED);
 
             return GetPaymentResponse.builder()
                     .payStatus(PayStatus.CANCELLED)
