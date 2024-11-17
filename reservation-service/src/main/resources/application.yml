@@ -1,0 +1,74 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: reservation-service
+  # Bean 오버라이딩 허용 설정 추가
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/reservationservice?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+
+  kafka:
+    bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
+    topic:
+      payment-events: payment-events
+      reservation-events: reservation-events
+      reservation-created: seat.reservation.created
+      reservation-created-compensation: seat.reservation.create.compensation
+    consumer:
+      group-id: reservation-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+
+payment:
+  toss:
+    url: "https://api.tosspayments.com/v1/payments"
+    test_client_api_key: test_ck_d46qopOB896o7NDMkGm73ZmM75y0
+    test_secret_api_key: test_sk_zXLkKEypNArWmo50nX3lmeaxYG5R
+    success_url: "http://localhost:8080/api/v1/payments/toss/success"
+    fail_url: "http://localhost:8080/api/v1/payments/toss/fail"
+
+webhooks:
+  url: ${WEBHOOKS_URL}
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, info, prometheus
+#
+logging:
+  level:
+    root: info
+  config: classpath:logback-reservation.xml

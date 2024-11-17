@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:5001</destination> <!-- 서비스랑 포트 번호 맞게 설정 -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"serviceName": "coupon-service"}</customFields>
+        </encoder>
+        <layout class="net.logstash.logback.layout.LogstashLayout">
+            <timestampPattern>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampPattern>
+        </layout>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="LOGSTASH" />
+    </root>
+
+</configuration>

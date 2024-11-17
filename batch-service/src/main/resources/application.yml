@@ -1,0 +1,51 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: batch-service
+  batch: # 프로젝트 실행 시 자동으로 배치 작업이 가동되는 것을 방지
+    jdbc:
+      initialize-schema: never
+  # Bean 오버라이딩 허용 설정 추가
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/batchservice?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+
+
+logging:
+  level:
+    com.eatpizzaquickly.batchservice.coupon.batch: DEBUG
+    com.eatpizzaquickly.batchservice.coupon.client.CouponServiceClient: DEBUG
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full

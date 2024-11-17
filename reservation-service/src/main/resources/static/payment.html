@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toss Pay Test</title>
+    <script src="https://js.tosspayments.com/v1"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Toss Pay Test</h1>
+    <form id="payment-form">
+        <label for="orderId">주문 ID:</label>
+        <input type="text" id="orderId" required>
+
+        <label for="amount">금액:</label>
+        <input type="number" id="amount" required>
+
+        <label for="orderName">주문명:</label>
+        <input type="text" id="orderName" required>
+
+        <label for="customerName">고객명:</label>
+        <input type="text" id="customerName" required>
+
+        <button type="submit">결제하기</button>
+    </form>
+</div>
+
+<script>
+    const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
+    const tossPayments = TossPayments(clientKey);
+
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const orderId = document.getElementById('orderId').value;
+        const amount = document.getElementById('amount').value;
+        const orderName = document.getElementById('orderName').value;
+        const customerName = document.getElementById('customerName').value;
+
+        tossPayments.requestPayment('카드', {
+            amount: amount,
+            orderId: orderId,
+            orderName: orderName,
+            customerName: customerName,
+            successUrl: `${window.location.origin}/api/v1/payments/toss/success`,
+            failUrl: `${window.location.origin}/api/v1/payments/toss/fail`,
+        }).catch(function (error) {
+            if (error.code === 'USER_CANCEL') {
+                alert('결제가 취소되었습니다.');
+            } else {
+                alert('결제 중 오류가 발생했습니다: ' + error.message);
+            }
+        });
+    });
+
+    // URL 파라미터 파싱 함수
+    function getUrlParams() {
+        let params = {};
+        window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
+            params[key] = decodeURIComponent(value);
+        });
+        return params;
+    }
+
+    // 결제 성공 또는 실패 처리
+    window.addEventListener('load', function() {
+        const urlParams = getUrlParams();
+        if (urlParams.paymentKey && urlParams.orderId && urlParams.amount) {
+            // 결제 성공
+            alert('결제가 성공적으로 완료되었습니다!\n주문 ID: ' + urlParams.orderId);
+        } else if (urlParams.code && urlParams.message) {
+            // 결제 실패
+            alert('결제에 실패했습니다.\n오류 코드: ' + urlParams.code + '\n메시지: ' + urlParams.message);
+        }
+    });
+</script>
+</body>
+</html>
