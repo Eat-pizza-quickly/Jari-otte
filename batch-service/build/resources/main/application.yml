@@ -10,7 +10,10 @@ spring:
   # Bean 오버라이딩 허용 설정 추가
   main:
     allow-bean-definition-overriding: true
-
+  data:
+    redis:
+      host: localhost
+      port: 6379
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/batchservice?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -35,13 +38,14 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}
     prefer-ip-address: true
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: health, info, prometheus
 
 logging:
   level:
-    root: info
-  config: classpath:logback-batch.xml
+    com.eatpizzaquickly.batchservice.coupon.batch: DEBUG
+    com.eatpizzaquickly.batchservice.coupon.client.CouponServiceClient: DEBUG
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
